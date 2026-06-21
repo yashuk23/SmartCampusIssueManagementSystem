@@ -12,18 +12,19 @@ dotenv.config();
 
 const app = express();
 
-// connectDB();
+connectDB();
 
 app.use(
   cors({
     origin: [
       "http://localhost:5173",
-      process.env.CLIENT_URL
+      "https://smart-campus-issue-management-syste-murex.vercel.app"
     ],
-    credentials: true
+    credentials: true,
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"]
   })
 );
-
 
 app.use(express.json());
 app.use(cookieParser());
