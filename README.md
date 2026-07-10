@@ -1,84 +1,22 @@
 # Smart Campus Issue Management System
 
-A full-stack MERN application for reporting, assigning, and resolving campus issues with secure JWT authentication and role-based access control.
+Full-stack MERN application for campus issue reporting, assignment, and resolution with JWT authentication and role-based access control.
 
-## Tech Stack
+## Stack
 
 - MongoDB with Mongoose
 - Express.js and Node.js
 - React.js with Vite
 - Tailwind CSS
-- JWT authentication with bcrypt password hashing
+- JWT + bcrypt
 
-## Features
+## Roles
 
-- User registration and login
-- Role-based dashboards for `student`, `staff`, and `admin`
-- Students can create issues and track their own submissions
-- Admins can view all issues, search and filter them, and assign staff
-- Staff can view assigned issues and update status
-- Protected routes on both backend and frontend
-- Toast notifications, loading states, form validation, and error handling
+- `student`: create issues and view personal issue history
+- `staff`: view assigned issues and update status
+- `admin`: view all issues and assign them to staff
 
-## Folder Structure
-
-```text
-backend/
-  config/
-  controllers/
-  middleware/
-  models/
-  routes/
-frontend/
-  src/
-    components/
-    context/
-    layouts/
-    pages/
-    services/
-```
-
-## Local Setup
-
-### 1. Install dependencies
-
-```bash
-npm install
-npm run install:all
-```
-
-### 2. Configure environment files
-
-Create `backend/.env` from `backend/.env.example`:
-
-```env
-PORT=5000
-MONGO_URI=mongodb://127.0.0.1:27017/smart-campus-issues
-JWT_SECRET=replace_with_a_strong_secret
-JWT_EXPIRES_IN=7d
-CLIENT_URL=http://localhost:5173
-ALLOW_ADMIN_REGISTRATION=false
-```
-
-Create `frontend/.env` from `frontend/.env.example`:
-
-```env
-VITE_API_URL=http://localhost:5000/api
-```
-
-### 3. Start MongoDB
-
-Make sure your MongoDB server is running locally or update `MONGO_URI` to point to your MongoDB instance.
-
-### 4. Run the app
-
-```bash
-npm run dev
-```
-
-Backend runs on `http://localhost:5000` and frontend runs on `http://localhost:5173`.
-
-## API Endpoints
+## Backend API
 
 ### Auth
 
@@ -94,8 +32,80 @@ Backend runs on `http://localhost:5000` and frontend runs on `http://localhost:5
 - `PUT /api/issues/:id/assign`
 - `PUT /api/issues/:id/status`
 
+## Local setup
+
+### 1. Install dependencies
+
+```bash
+npm install
+npm run install:all
+```
+
+### 2. Configure environment files
+
+Backend: [backend/.env.example](C:\Users\kanaw\OneDrive\Desktop\Smart-Campus-Issue-Management-System\backend\.env.example)
+
+```env
+PORT=5000
+MONGO_URI=mongodb://127.0.0.1:27017/smart-campus-issues
+JWT_SECRET=change_this_to_a_real_secret
+JWT_EXPIRES_IN=7d
+CLIENT_URL=http://localhost:5173
+ALLOW_ADMIN_REGISTRATION=true
+```
+
+Frontend: [frontend/.env.example](C:\Users\kanaw\OneDrive\Desktop\Smart-Campus-Issue-Management-System\frontend\.env.example)
+
+```env
+VITE_API_URL=http://localhost:5000/api
+```
+
+### 3. Start MongoDB
+
+Run MongoDB locally, or change `MONGO_URI` to a reachable MongoDB instance.
+
+### 4. Seed demo users
+
+```bash
+npm run seed
+```
+
+Demo credentials:
+
+- `admin@campus.com` / `Admin123!`
+- `staff@campus.com` / `Staff123!`
+- `student@campus.com` / `Student123!`
+
+### 5. Run the application
+
+```bash
+npm run dev
+```
+
+- Backend: `http://localhost:5000`
+- Frontend: `http://localhost:5173`
+
+## Folder structure
+
+```text
+backend/
+  config/
+  controllers/
+  middleware/
+  models/
+  routes/
+  seeds/
+frontend/
+  src/
+    components/
+    context/
+    layouts/
+    pages/
+    services/
+```
+
 ## Notes
 
-- By default, admin self-registration is disabled for safety. Set `ALLOW_ADMIN_REGISTRATION=true` in `backend/.env` if you want to allow it for demos.
+- Admin assignment is available from the admin dashboard through `PUT /api/issues/:id/assign`.
 - JWTs are stored in local storage on the frontend in this implementation.
-- Optional advanced features like email notifications, uploads, and sockets are not included in this base version, but the code structure is ready for extension.
+- The demo seed updates the three demo users if they already exist.

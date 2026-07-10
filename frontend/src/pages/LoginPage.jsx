@@ -103,7 +103,7 @@ const LoginPage = () => {
             </button>
           </form>
           <div className="mt-6 rounded-2xl border border-brand-100 bg-brand-50/70 px-4 py-3 text-sm text-brand-900">
-            New users can create a student or staff account in a few seconds.
+            Demo accounts: admin@campus.com / Admin123!, staff@campus.com / Staff123!, student@campus.com / Student123!
           </div>
           <p className="mt-6 text-sm text-slate-500">
             Need an account? <Link to="/register" className="font-semibold text-brand-600">Register here</Link>
