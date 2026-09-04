@@ -16,8 +16,8 @@ router.use(authMiddleware);
 
 router.post("/", roleMiddleware("student"), createIssue);
 router.get("/my", roleMiddleware("student"), getMyIssues);
-router.get("/", roleMiddleware("admin"), getAllIssues);
 router.get("/assigned", roleMiddleware("staff"), getAssignedIssues);
+router.get("/", roleMiddleware("admin"), getAllIssues);
 router.put("/:id/assign", roleMiddleware("admin"), assignIssue);
 router.put("/:id/status", roleMiddleware("staff"), updateIssueStatus);
 
