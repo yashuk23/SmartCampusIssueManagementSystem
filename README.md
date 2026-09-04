@@ -108,4 +108,4 @@ frontend/
 
 - Admin assignment is available from the admin dashboard through `PUT /api/issues/:id/assign`.
 - JWTs are stored in local storage on the frontend in this implementation.
-- The demo seed updates the three demo users if they already exist.
+- The demo seed updates the three demo users if they are already exist.
