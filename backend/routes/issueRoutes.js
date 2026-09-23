@@ -1,5 +1,6 @@
 import express from "express";
-import {
+import 
+{
   assignIssue,
   createIssue,
   getAllIssues,
@@ -16,9 +17,11 @@ router.use(authMiddleware);
 
 router.post("/", roleMiddleware("student"), createIssue);
 router.get("/my", roleMiddleware("student"), getMyIssues);
-router.get("/assigned", roleMiddleware("staff"), getAssignedIssues);
+
 router.get("/", roleMiddleware("admin"), getAllIssues);
 router.put("/:id/assign", roleMiddleware("admin"), assignIssue);
+
+router.get("/assigned", roleMiddleware("staff"), getAssignedIssues);
 router.put("/:id/status", roleMiddleware("staff"), updateIssueStatus);
 
 export default router;

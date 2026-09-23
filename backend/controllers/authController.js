@@ -2,15 +2,18 @@ import jwt from "jsonwebtoken";
 import { User } from "../models/User.js";
 
 const createToken = (id) =>
-  jwt.sign({ id }, process.env.JWT_SECRET, {
+  jwt.sign({ id }, process.env.JWT_SECRET, 
+  {
     expiresIn: process.env.JWT_EXPIRES_IN || "7d"
   });
 
 export const register = async (req, res, next) => {
-  try {
+  try 
+  {
     const { name, email, password, role } = req.body;
 
-    if (!name || !email || !password) {
+    if (!name || !email || !password) 
+    {
       return res.status(400).json({ message: "Name, email, and password are required" });
     }
 
@@ -45,35 +48,42 @@ export const register = async (req, res, next) => {
         role: user.role
       }
     });
-  } catch (error) {
+  } catch (error) 
+  {
     next(error);
   }
 };
 
 export const login = async (req, res, next) => {
-  try {
+  try 
+  {
     const { email, password } = req.body;
 
-    if (!email || !password) {
+    if (!email || !password) 
+    {
       return res.status(400).json({ message: "Email and password are required" });
     }
 
     const user = await User.findOne({ email: email.toLowerCase() });
-    if (!user) {
+    if (!user) 
+    {
       return res.status(401).json({ message: "Invalid email or password" });
     }
 
     const isMatch = await user.comparePassword(password);
-    if (!isMatch) {
+    if (!isMatch) 
+    {
       return res.status(401).json({ message: "Invalid email or password" });
     }
 
     const token = createToken(user._id);
 
-    res.json({
+    res.json(
+    {
       message: "Login successful",
       token,
-      user: {
+      user: 
+      {
         id: user._id,
         name: user.name,
         email: user.email,

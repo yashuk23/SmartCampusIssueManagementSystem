@@ -29,17 +29,20 @@ const issueSchema = new mongoose.Schema(
         "other"
       ]
     },
-    status: {
+    status: 
+    {
       type: String,
       enum: ["pending", "in-progress", "resolved"],
       default: "pending"
     },
-    createdBy: {
+    createdBy: 
+    {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
       required: true
     },
-    assignedTo: {
+    assignedTo: 
+    {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
       default: null

@@ -1,23 +1,16 @@
 import mongoose from "mongoose";
-
 let isConnected = false;
 
 export const connectDB = async () => {
-  if (isConnected) {
-    return mongoose.connection;
-  }
+    if (isConnected) {
+        return;
+    }
 
-  if (!process.env.MONGO_URI) {
-    throw new Error("MONGO_URI is not set in backend/.env");
-  }
+    if (!process.env.MONGO_URI) {
+        throw new Error("MONGO_URI is missing");
+    }
+    await mongoose.connect(process.env.MONGO_URI);
 
-  const connection = await mongoose.connect(process.env.MONGO_URI);
-  isConnected = connection.connection.readyState === 1;
-  console.log(`MongoDB connected: ${connection.connection.host}`);
-  return connection.connection;
+    isConnected = true;
+    console.log("MongoDB connected");
 };
-
-export const getDbStatus = () => ({
-  connected: mongoose.connection.readyState === 1,
-  readyState: mongoose.connection.readyState
-});

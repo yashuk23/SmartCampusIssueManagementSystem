@@ -4,7 +4,8 @@ import { User } from "../models/User.js";
 
 dotenv.config();
 
-const demoUsers = [
+const demoUsers = 
+[
   {
     name: "Campus Admin",
     email: "admin@campus.com",
