@@ -60,8 +60,8 @@ const StaffDashboard = () => {
   return (
     <DashboardLayout title="Staff Dashboard" subtitle="View assigned issues and update their resolution progress.">
       <div className="grid gap-4 md:grid-cols-3">
-        {stats.map(({ label, value, icon: Icon, tone }) => (
-          <div key={label} className={`stat-card bg-gradient-to-br ${tone}`}>
+        {stats.map(({ label, value, icon: Icon, tone }, index) => (
+          <div key={label} className={`stat-card bg-gradient-to-br ${tone}`} style={{ "--card-index": index }}>
             <div className="flex items-start justify-between gap-3">
               <div>
                 <p className="text-sm font-medium text-slate-500">{label}</p>
@@ -86,11 +86,14 @@ const StaffDashboard = () => {
                 key={issue._id}
                 issue={issue}
                 actionSlot={
-                  <select value={issue.status} onChange={(event) => handleStatusUpdate(issue._id, event.target.value)} className="select-field">
+                  <label className="status-control">
+                    <span>Update status</span>
+                    <select aria-label={`Update status for ${issue.title}`} value={issue.status} onChange={(event) => handleStatusUpdate(issue._id, event.target.value)} className="select-field">
                     <option value="pending">Pending</option>
                     <option value="in-progress">In Progress</option>
                     <option value="resolved">Resolved</option>
-                  </select>
+                    </select>
+                  </label>
                 }
               />
             ))}

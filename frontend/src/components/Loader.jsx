@@ -1,9 +1,11 @@
 const Loader = ({ label = "Loading..." }) => (
-  <div className="section-card">
-    <div className="flex items-center justify-center gap-3 text-slate-600">
-      <span className="h-5 w-5 animate-spin rounded-full border-2 border-brand-500 border-t-transparent" />
-      <span className="font-medium">{label}</span>
+  <div className="loading-state" role="status" aria-live="polite">
+    <div className="loading-state-heading">
+      <span className="loading-spinner" />
+      <span>{label}</span>
     </div>
+    <div className="skeleton-card" />
+    <div className="skeleton-card skeleton-card-short" />
   </div>
 );
 

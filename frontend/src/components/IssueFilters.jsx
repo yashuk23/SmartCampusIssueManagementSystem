@@ -1,10 +1,10 @@
 const IssueFilters = ({ filters, onChange, categories }) => (
-  <div className="section-card">
+  <section className="section-card filter-panel" aria-labelledby="filter-heading">
     <div className="flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between">
       <div>
-        <div className="eyebrow">Refine results</div>
-        <h2 className="mt-3 text-xl font-semibold text-slate-950">Find issues faster</h2>
-        <p className="mt-1 text-sm text-slate-500">Search by keyword, narrow by status, or focus on a category.</p>
+        <div className="dashboard-eyebrow">ISSUE TRACKER</div>
+        <h2 id="filter-heading" className="mt-2 text-xl font-semibold text-slate-950">All reports</h2>
+        <p className="mt-1 text-sm text-slate-500">Search and filter the reports in your workspace.</p>
       </div>
       <div className="grid gap-4 md:grid-cols-3 lg:min-w-[640px]">
         <label className="space-y-2">
@@ -14,7 +14,8 @@ const IssueFilters = ({ filters, onChange, categories }) => (
             name="search"
             value={filters.search}
             onChange={onChange}
-            placeholder="Title, description, or assignee"
+            placeholder="Search issues..."
+            aria-label="Search issues by title, description, or assignee"
             className="input-field"
           />
         </label>
@@ -33,14 +34,14 @@ const IssueFilters = ({ filters, onChange, categories }) => (
             <option value="">All categories</option>
             {categories.map((category) => (
               <option key={category} value={category}>
-                {category}
+                {category.charAt(0).toUpperCase() + category.slice(1)}
               </option>
             ))}
           </select>
         </label>
       </div>
     </div>
-  </div>
+  </section>
 );
 
 export default IssueFilters;

@@ -71,8 +71,8 @@ const StudentDashboard = () => {
   return (
     <DashboardLayout title="Student Dashboard" subtitle="Create issues and track their progress in one place.">
       <div className="grid gap-4 md:grid-cols-3">
-        {stats.map(({ label, value, icon: Icon, tone }) => (
-          <div key={label} className={`stat-card bg-gradient-to-br ${tone}`}>
+        {stats.map(({ label, value, icon: Icon, tone }, index) => (
+          <div key={label} className={`stat-card bg-gradient-to-br ${tone}`} style={{ "--card-index": index }}>
             <div className="flex items-start justify-between gap-3">
               <div>
                 <p className="text-sm font-medium text-slate-500">{label}</p>
@@ -87,7 +87,7 @@ const StudentDashboard = () => {
       </div>
 
       <div className="mt-6 grid gap-6 xl:grid-cols-[400px_1fr]">
-        <form className="section-card space-y-5" onSubmit={handleSubmit}>
+        <form id="report-issue" className="section-card report-form space-y-5" onSubmit={handleSubmit}>
           <div>
             <div className="eyebrow">New report</div>
             <h2 className="mt-3 text-2xl font-semibold text-slate-950">Report a campus issue</h2>
@@ -122,7 +122,7 @@ const StudentDashboard = () => {
             <select name="category" value={formData.category} onChange={handleFormChange} className="select-field">
               {categories.map((category) => (
                 <option key={category} value={category}>
-                  {category}
+                  {category.charAt(0).toUpperCase() + category.slice(1)}
                 </option>
               ))}
             </select>
@@ -131,7 +131,7 @@ const StudentDashboard = () => {
             Clear issue titles and location details usually lead to faster assignment.
           </div>
           <button type="submit" disabled={submitting} className="primary-btn w-full">
-            {submitting ? "Submitting..." : "Submit issue"}
+            {submitting ? "Submitting report..." : "Submit issue"}
             {!submitting && <Send size={18} />}
           </button>
         </form>

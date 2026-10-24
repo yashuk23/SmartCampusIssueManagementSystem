@@ -1,4 +1,4 @@
-import { ArrowRight, Building2, GraduationCap, UserCog } from "lucide-react";
+import { ArrowRight, Eye, EyeOff, GraduationCap, ShieldCheck, UserCog, Wrench } from "lucide-react";
 import { useMemo, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
@@ -6,24 +6,25 @@ import { useAuth } from "../context/AuthContext";
 const roleDetails = {
   student: {
     icon: GraduationCap,
-    title: "Student access",
-    description: "Report campus problems, monitor progress, and stay updated on resolution."
+    title: "Student",
+    description: "Report campus issues and follow progress through to resolution."
   },
   staff: {
     icon: UserCog,
-    title: "Staff access",
-    description: "Receive assigned issues, update status, and keep response work moving."
+    title: "Staff",
+    description: "Manage assigned reports and share updates as work moves forward."
   },
   admin: {
-    icon: Building2,
-    title: "Admin access",
-    description: "Oversee all issues and route them to the right teams with clear ownership."
+    icon: ShieldCheck,
+    title: "Administrator",
+    description: "Coordinate campus reports and route work to the right people."
   }
 };
 
 const RegisterPage = () => {
   const navigate = useNavigate();
   const { register, loading } = useAuth();
+  const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -44,92 +45,102 @@ const RegisterPage = () => {
   };
 
   return (
-    <div className="flex min-h-screen items-center justify-center px-4 py-8 md:px-6">
-      <div className="grid w-full max-w-5xl overflow-hidden rounded-[32px] border border-white/70 bg-white/75 shadow-soft backdrop-blur xl:grid-cols-[0.95fr_1.05fr]">
-        <div className="bg-[linear-gradient(180deg,#f8fbff_0%,#e7f3ff_54%,#eefaf7_100%)] p-8 md:p-10">
-          <div className="eyebrow">Create account</div>
-          <h1 className="mt-4 text-3xl font-bold tracking-tight text-slate-950 md:text-4xl">Join the campus response network</h1>
-          <p className="mt-3 text-sm leading-6 text-slate-600 md:text-base">
-            Create your profile to start reporting issues or managing campus operations with a clearer, faster workflow.
-          </p>
+    <main className="auth-page">
+      <div className="auth-shell register-shell">
+        <section className="auth-aside register-aside">
+          <Link to="/" className="brand-lockup auth-brand">
+            <span className="brand-mark"><Wrench size={17} /></span>
+            <span>campus<span className="brand-dot">.</span>care</span>
+          </Link>
+          <div className="auth-aside-copy">
+            <div className="landing-kicker"><span /> Make campus better, together</div>
+            <h1>Every good fix begins with a clear report.</h1>
+            <p>Join the campus community making it easier to raise issues and see what happens next.</p>
+          </div>
+          <div className="role-preview">
+            <span className="role-preview-icon"><RoleIcon size={20} /></span>
+            <div><span>YOUR WORKSPACE</span><strong>{selectedRole.title}</strong><p>{selectedRole.description}</p></div>
+          </div>
+          <div className="auth-aside-bottom">
+            <span className="aside-icon"><ShieldCheck size={17} /></span>
+            <span>One shared place for<br /><strong>campus issue management</strong></span>
+          </div>
+        </section>
 
-          <div className="mt-8 rounded-[28px] border border-white/80 bg-white/80 p-5 shadow-sm">
-            <div className="flex items-start gap-4">
-              <div className="rounded-[22px] bg-slate-950 p-3 text-white">
-                <RoleIcon size={22} />
-              </div>
-              <div>
-                <h2 className="text-lg font-semibold text-slate-900">{selectedRole.title}</h2>
-                <p className="mt-1 text-sm leading-6 text-slate-600">{selectedRole.description}</p>
-              </div>
+        <section className="auth-form-panel">
+          <div className="auth-form-wrap">
+            <div className="auth-mobile-brand">
+              <Link to="/" className="brand-lockup"><span className="brand-mark"><Wrench size={17} /></span><span>campus<span className="brand-dot">.</span>care</span></Link>
             </div>
-          </div>
+            <div className="form-kicker"><ShieldCheck size={15} /> GET STARTED</div>
+            <h2>Create your account.</h2>
+            <p className="auth-form-description">Set up your campus workspace in a few steps.</p>
 
-          <div className="mt-5 space-y-3 text-sm text-slate-600">
-            <div className="rounded-2xl border border-slate-200 bg-white/80 px-4 py-3">Students and staff can sign up directly.</div>
-            <div className="rounded-2xl border border-slate-200 bg-white/80 px-4 py-3">Admin registration may still be controlled by backend rules.</div>
+            <form className="auth-form register-form" onSubmit={handleSubmit}>
+              <label className="form-label">
+                <span>Full name</span>
+                <input
+                  type="text"
+                  name="name"
+                  autoComplete="name"
+                  placeholder="Your full name"
+                  value={formData.name}
+                  onChange={handleChange}
+                  required
+                  className="input-field"
+                />
+              </label>
+              <label className="form-label">
+                <span>Email address</span>
+                <input
+                  type="email"
+                  name="email"
+                  autoComplete="email"
+                  placeholder="you@campus.edu"
+                  value={formData.email}
+                  onChange={handleChange}
+                  required
+                  className="input-field"
+                />
+              </label>
+              <label className="form-label">
+                <span>Password</span>
+                <div className="password-field">
+                  <input
+                    type={showPassword ? "text" : "password"}
+                    name="password"
+                    autoComplete="new-password"
+                    placeholder="At least 6 characters"
+                    value={formData.password}
+                    onChange={handleChange}
+                    required
+                    minLength={6}
+                    className="input-field"
+                  />
+                  <button type="button" className="password-toggle" onClick={() => setShowPassword((visible) => !visible)} aria-label={showPassword ? "Hide password" : "Show password"}>
+                    {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                  </button>
+                </div>
+              </label>
+              <label className="form-label">
+                <span>Workspace role</span>
+                <select name="role" value={formData.role} onChange={handleChange} className="select-field">
+                  <option value="student">Student</option>
+                  <option value="staff">Staff</option>
+                  <option value="admin">Admin</option>
+                </select>
+              </label>
+              <button type="submit" disabled={loading} className="button button-dark auth-submit">
+                {loading ? "Creating account..." : "Create account"} {!loading && <ArrowRight size={17} />}
+              </button>
+            </form>
+
+            <p className="auth-switch">Already have an account? <Link to="/login">Sign in <ArrowRight size={14} /></Link></p>
+            <p className="auth-security"><ShieldCheck size={14} /> Registration is handled by your campus workspace.</p>
           </div>
-        </div>
-        <div className="p-8 md:p-10">
-          <h2 className="text-2xl font-bold tracking-tight text-slate-950 md:text-3xl">Set up your profile</h2>
-          <p className="mt-2 text-sm leading-6 text-slate-500">Use a valid campus email and choose the role that matches how you will use the system.</p>
-          <form className="mt-8 grid gap-4 md:grid-cols-2" onSubmit={handleSubmit}>
-            <label className="space-y-2 md:col-span-2">
-              <span className="text-sm font-semibold text-slate-700">Full name</span>
-              <input
-                type="text"
-                name="name"
-                placeholder="Your full name"
-                value={formData.name}
-                onChange={handleChange}
-                required
-                className="input-field"
-              />
-            </label>
-            <label className="space-y-2 md:col-span-2">
-              <span className="text-sm font-semibold text-slate-700">Email address</span>
-              <input
-                type="email"
-                name="email"
-                placeholder="you@campus.edu"
-                value={formData.email}
-                onChange={handleChange}
-                required
-                className="input-field"
-              />
-            </label>
-            <label className="space-y-2">
-              <span className="text-sm font-semibold text-slate-700">Password</span>
-              <input
-                type="password"
-                name="password"
-                placeholder="At least 6 characters"
-                value={formData.password}
-                onChange={handleChange}
-                required
-                minLength={6}
-                className="input-field"
-              />
-            </label>
-            <label className="space-y-2">
-              <span className="text-sm font-semibold text-slate-700">Role</span>
-              <select name="role" value={formData.role} onChange={handleChange} className="select-field">
-                <option value="student">Student</option>
-                <option value="staff">Staff</option>
-                <option value="admin">Admin</option>
-              </select>
-            </label>
-            <button type="submit" disabled={loading} className="primary-btn md:col-span-2">
-              {loading ? "Creating account..." : "Create account"}
-              {!loading && <ArrowRight size={18} />}
-            </button>
-          </form>
-          <p className="mt-6 text-sm text-slate-500">
-            Already have an account? <Link to="/login" className="font-semibold text-brand-600">Login here</Link>
-          </p>
-        </div>
+        </section>
       </div>
-    </div>
+    </main>
   );
 };
 

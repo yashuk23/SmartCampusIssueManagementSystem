@@ -1,29 +1,12 @@
-import { ArrowRight, ShieldCheck, Sparkles, TimerReset } from "lucide-react";
+import { ArrowRight, Check, Eye, EyeOff, ShieldCheck, UsersRound, Wrench } from "lucide-react";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 
-const featureItems = [
-  {
-    icon: ShieldCheck,
-    title: "Role-based access",
-    description: "Students, staff, and admins each get the tools and visibility they need."
-  },
-  {
-    icon: TimerReset,
-    title: "Faster issue handling",
-    description: "Move from report to assignment and resolution without losing context."
-  },
-  {
-    icon: Sparkles,
-    title: "Clear campus oversight",
-    description: "Keep issue details, ownership, and status updates organized in one flow."
-  }
-];
-
 const LoginPage = () => {
   const navigate = useNavigate();
   const { login, loading } = useAuth();
+  const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState({ email: "", password: "" });
 
   const handleChange = (event) => {
@@ -37,80 +20,82 @@ const LoginPage = () => {
   };
 
   return (
-    <div className="flex min-h-screen items-center justify-center px-4 py-8 md:px-6">
-      <div className="grid w-full max-w-6xl overflow-hidden rounded-[32px] border border-white/70 bg-white/70 shadow-soft backdrop-blur xl:grid-cols-[1.08fr_0.92fr]">
-        <div className="relative overflow-hidden bg-[linear-gradient(145deg,#0f172a_0%,#0f3d66_48%,#0d9488_100%)] p-8 text-white md:p-12">
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(255,255,255,0.18),transparent_28%),radial-gradient(circle_at_bottom_right,rgba(186,230,253,0.2),transparent_22%)]" />
-          <div className="relative">
-            <p className="inline-flex rounded-full border border-white/20 bg-white/10 px-4 py-2 text-sm font-medium text-sky-50">
-              Campus operations, streamlined
-            </p>
-            <h1 className="mt-6 max-w-xl text-4xl font-bold leading-tight md:text-5xl">Smart Campus Issue Management System</h1>
-            <p className="mt-5 max-w-xl text-base leading-7 text-slate-200">
-              Help your campus community report problems quickly, route them to the right people, and track progress with confidence.
-            </p>
+    <main className="auth-page">
+      <div className="auth-shell">
+        <section className="auth-aside">
+          <Link to="/" className="brand-lockup auth-brand">
+            <span className="brand-mark"><Wrench size={17} /></span>
+            <span>campus<span className="brand-dot">.</span>care</span>
+          </Link>
+          <div className="auth-aside-copy">
+            <div className="landing-kicker"><span /> A thoughtful campus, together</div>
+            <h1>Good campus care starts with being heard.</h1>
+            <p>Report an issue, find the right team, and keep the whole campus moving forward.</p>
+          </div>
+          <div className="auth-aside-points">
+            <div><span><Check size={15} /></span> Report and track campus issues</div>
+            <div><span><Check size={15} /></span> Clear ownership at every step</div>
+            <div><span><Check size={15} /></span> One workspace for every role</div>
+          </div>
+          <div className="auth-aside-bottom">
+            <span className="aside-icon"><UsersRound size={17} /></span>
+            <span>Students, staff, and admins<br /><strong>working better together</strong></span>
+          </div>
+        </section>
 
-            <div className="mt-10 grid gap-4">
-              {featureItems.map(({ icon: Icon, title, description }) => (
-                <div key={title} className="rounded-[24px] border border-white/15 bg-white/10 p-4 backdrop-blur">
-                  <div className="flex items-start gap-3">
-                    <div className="rounded-2xl bg-white/15 p-2.5">
-                      <Icon size={18} />
-                    </div>
-                    <div>
-                      <h2 className="text-base font-semibold">{title}</h2>
-                      <p className="mt-1 text-sm leading-6 text-slate-200">{description}</p>
-                    </div>
-                  </div>
-                </div>
-              ))}
+        <section className="auth-form-panel">
+          <div className="auth-form-wrap">
+            <div className="auth-mobile-brand">
+              <Link to="/" className="brand-lockup"><span className="brand-mark"><Wrench size={17} /></span><span>campus<span className="brand-dot">.</span>care</span></Link>
             </div>
+            <div className="form-kicker"><ShieldCheck size={15} /> YOUR CAMPUS WORKSPACE</div>
+            <h2>Welcome back.</h2>
+            <p className="auth-form-description">Sign in with your account to continue.</p>
+
+            <form className="auth-form" onSubmit={handleSubmit}>
+              <label className="form-label">
+                <span>Email address</span>
+                <input
+                  type="email"
+                  name="email"
+                  autoComplete="email"
+                  placeholder="you@campus.edu"
+                  value={formData.email}
+                  onChange={handleChange}
+                  required
+                  className="input-field"
+                />
+              </label>
+              <label className="form-label">
+                <span>Password</span>
+                <div className="password-field">
+                  <input
+                    type={showPassword ? "text" : "password"}
+                    name="password"
+                    autoComplete="current-password"
+                    placeholder="Enter your password"
+                    value={formData.password}
+                    onChange={handleChange}
+                    required
+                    minLength={6}
+                    className="input-field"
+                  />
+                  <button type="button" className="password-toggle" onClick={() => setShowPassword((visible) => !visible)} aria-label={showPassword ? "Hide password" : "Show password"}>
+                    {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                  </button>
+                </div>
+              </label>
+              <button type="submit" disabled={loading} className="button button-dark auth-submit">
+                {loading ? "Signing in..." : "Sign in"} {!loading && <ArrowRight size={17} />}
+              </button>
+            </form>
+
+            <p className="auth-switch">New to Campus Care? <Link to="/register">Create an account <ArrowRight size={14} /></Link></p>
+            <p className="auth-security"><ShieldCheck size={14} /> Your campus account keeps your workspace secure.</p>
           </div>
-        </div>
-        <div className="p-8 md:p-12">
-          <div className="eyebrow">Welcome back</div>
-          <h2 className="mt-4 text-3xl font-bold tracking-tight text-slate-950 md:text-4xl">Sign in to your workspace</h2>
-          <p className="mt-3 text-sm leading-6 text-slate-500 md:text-base">Use your campus account to continue managing reports, assignments, and progress updates.</p>
-          <form className="mt-8 space-y-4" onSubmit={handleSubmit}>
-            <label className="block space-y-2">
-              <span className="text-sm font-semibold text-slate-700">Email address</span>
-              <input
-                type="email"
-                name="email"
-                placeholder="you@campus.edu"
-                value={formData.email}
-                onChange={handleChange}
-                required
-                className="input-field"
-              />
-            </label>
-            <label className="block space-y-2">
-              <span className="text-sm font-semibold text-slate-700">Password</span>
-              <input
-                type="password"
-                name="password"
-                placeholder="Enter your password"
-                value={formData.password}
-                onChange={handleChange}
-                required
-                minLength={6}
-                className="input-field"
-              />
-            </label>
-            <button type="submit" disabled={loading} className="primary-btn w-full">
-              {loading ? "Signing in..." : "Continue to dashboard"}
-              {!loading && <ArrowRight size={18} />}
-            </button>
-          </form>
-          <div className="mt-6 rounded-2xl border border-brand-100 bg-brand-50/70 px-4 py-3 text-sm text-brand-900">
-            Demo accounts: admin@campus.com / Admin123!, staff@campus.com / Staff123!, student@campus.com / Student123!
-          </div>
-          <p className="mt-6 text-sm text-slate-500">
-            Need an account? <Link to="/register" className="font-semibold text-brand-600">Register here</Link>
-          </p>
-        </div>
+        </section>
       </div>
-    </div>
+    </main>
   );
 };
 

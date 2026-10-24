@@ -22,13 +22,17 @@ const metaPillClass = "inline-flex items-center gap-2 rounded-full border border
 
 const IssueCard = ({ issue, actionSlot }) => {
   const StatusIcon = statusIcons[issue.status] || CircleDashed;
+  const createdAt = new Date(issue.createdAt);
+  const createdDate = Number.isNaN(createdAt.getTime())
+    ? "Date unavailable"
+    : createdAt.toLocaleDateString(undefined, { month: "short", day: "numeric", year: "numeric" });
 
   return (
-    <div className="section-card">
+    <article className="section-card issue-card">
       <div className="flex flex-col gap-5 lg:flex-row lg:items-start lg:justify-between">
         <div className="max-w-3xl">
           <div className="flex flex-wrap items-center gap-3">
-            <span className={`status-badge ${statusClasses[issue.status]}`}>
+            <span className={`status-badge ${statusClasses[issue.status] || "bg-slate-100 text-slate-700"}`}>
               <StatusIcon size={14} className="mr-1.5" />
               {formatLabel(issue.status)}
             </span>
@@ -38,7 +42,7 @@ const IssueCard = ({ issue, actionSlot }) => {
             </span>
           </div>
           <h3 className="mt-4 text-xl font-semibold text-slate-950">{issue.title}</h3>
-          <p className="mt-3 text-sm leading-6 text-slate-600 md:text-base">{issue.description}</p>
+          <p className="mt-3 whitespace-pre-line text-sm leading-6 text-slate-600 md:text-base">{issue.description}</p>
         </div>
 
         {actionSlot && <div className="w-full lg:w-auto lg:min-w-[190px]">{actionSlot}</div>}
@@ -59,10 +63,10 @@ const IssueCard = ({ issue, actionSlot }) => {
         )}
         <span className={metaPillClass}>
           <CalendarClock size={13} />
-          Created {new Date(issue.createdAt).toLocaleString()}
+          Reported {createdDate}
         </span>
       </div>
-    </div>
+    </article>
   );
 };
 

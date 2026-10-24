@@ -66,8 +66,8 @@ const AdminDashboard = () => {
   return (
     <DashboardLayout title="Admin Dashboard" subtitle="Monitor all issues and assign them to the right staff members.">
       <div className="grid gap-4 md:grid-cols-3">
-        {stats.map(({ label, value, icon: Icon, tone }) => (
-          <div key={label} className={`stat-card bg-gradient-to-br ${tone}`}>
+        {stats.map(({ label, value, icon: Icon, tone }, index) => (
+          <div key={label} className={`stat-card bg-gradient-to-br ${tone}`} style={{ "--card-index": index }}>
             <div className="flex items-start justify-between gap-3">
               <div>
                 <p className="text-sm font-medium text-slate-500">{label}</p>
@@ -92,14 +92,17 @@ const AdminDashboard = () => {
                 key={issue._id}
                 issue={issue}
                 actionSlot={
-                  <select defaultValue={issue.assignedTo?._id || ""} onChange={(event) => handleAssign(issue._id, event.target.value)} className="select-field">
+                  <label className="status-control">
+                    <span>Assign to staff</span>
+                    <select aria-label={`Assign ${issue.title} to staff`} defaultValue={issue.assignedTo?._id || ""} onChange={(event) => handleAssign(issue._id, event.target.value)} className="select-field">
                     <option value="">Assign staff</option>
                     {staff.map((member) => (
                       <option key={member._id} value={member._id}>
                         {member.name}
                       </option>
                     ))}
-                  </select>
+                    </select>
+                  </label>
                 }
               />
             ))}
