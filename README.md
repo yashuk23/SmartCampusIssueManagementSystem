@@ -46,7 +46,7 @@ MongoDB Atlas
 ## Live Deployment
 
 - **Frontend:** Deployed on Netlify
-- **Backend API:** [Smart Campus Backend](https://smartcampusissuemanagementsystem-1.onrender.com)
+- **Backend API:** [Smart Campus Backend](https://smartcampusissuemanagementsystem-1.onrender.com/api)
 - **Database:** MongoDB Atlas
 
 *The frontend link can be added once your Netlify deployment is available.*
@@ -142,8 +142,7 @@ Configure `VITE_API_URL` in Netlify to point to your deployed backend, then trig
 
 The backend is hosted on Render:
 
-https://smartcampusissuemanagementsystem-1.onrender.com
-
+https://smartcampusissuemanagementsystem-1.onrender.com/api
 Configure the backend's environment variables in Render, including the MongoDB connection string and the production frontend origin. The backend must listen on the port supplied by the hosting platform.
 
 ### Database — MongoDB Atlas
