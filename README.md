@@ -17,6 +17,16 @@ The goal is to make campus issue management more organized, transparent, and eff
 
 *Features listed above should reflect the functionality available in the current implementation.*
 
+## Role-Based Access
+
+After login or registration, the backend-provided account role determines the dashboard:
+
+- Students use `/student` to submit and track their own reports.
+- Staff use `/staff` to manage issues assigned to them.
+- Administrators use `/admin` to review all issues and assign them to staff.
+
+The backend rejects unknown roles rather than silently creating a student account. Admin self-registration is disabled unless `ALLOW_ADMIN_REGISTRATION=true` is explicitly configured on the backend. Keep it disabled for public deployments; provision administrator accounts through a trusted process. A user whose account was previously created with the wrong role must have the account role corrected in MongoDB before signing in again.
+
 ## Technology Stack
 
 | Layer | Technologies |

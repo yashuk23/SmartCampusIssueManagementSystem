@@ -22,18 +22,23 @@ export const register = async (req, res, next) => {
       return res.status(409).json({ message: "Email already registered" });
     }
 
-    const normalizedRole =
-      role === "admin" && process.env.ALLOW_ADMIN_REGISTRATION !== "true"
-        ? "student"
-        : ["student", "staff", "admin"].includes(role)
-          ? role
-          : "student";
+    const requestedRole = role || "student";
+
+    if (!["student", "staff", "admin"].includes(requestedRole)) {
+      return res.status(400).json({ message: "Invalid account role" });
+    }
+
+    if (requestedRole === "admin" && process.env.ALLOW_ADMIN_REGISTRATION !== "true") {
+      return res.status(403).json({
+        message: "Admin registration is disabled. Ask a campus administrator to provision your account."
+      });
+    }
 
     const user = await User.create({
       name,
       email,
       password,
-      role: normalizedRole
+      role: requestedRole
     });
 
     const token = createToken(user._id);
