@@ -25,7 +25,37 @@ After login or registration, the backend-provided account role determines the da
 - Staff use `/staff` to manage issues assigned to them.
 - Administrators use `/admin` to review all issues and assign them to staff.
 
-The backend rejects unknown roles rather than silently creating a student account. Admin self-registration is disabled unless `ALLOW_ADMIN_REGISTRATION=true` is explicitly configured on the backend. Keep it disabled for public deployments; provision administrator accounts through a trusted process. A user whose account was previously created with the wrong role must have the account role corrected in MongoDB before signing in again.
+The backend rejects unknown roles rather than silently creating a student account. There can be only one administrator account: provisioning refuses to add or promote a different account when one already exists, and the database enforces the singleton for all new admin accounts. Admin self-registration is disabled unless `ALLOW_ADMIN_REGISTRATION=true` is explicitly configured on the backend; even then, registration is rejected once an admin exists. Keep it disabled for public deployments. To create the first admin (or promote the one existing account), run the trusted backend provisioning command below; it does not expose an admin-registration endpoint.
+
+### Provision an Administrator
+
+Run this command from the `backend` directory on a trusted machine or in the backend service shell. Use the same `MONGO_URI` as the deployed backend. Set a strong, private password; do not commit it or paste it into source code.
+
+PowerShell:
+
+```powershell
+$env:ADMIN_NAME = "Campus Administrator"
+$env:ADMIN_EMAIL = "admin@example.edu"
+$securePassword = Read-Host "Choose a strong admin password" -AsSecureString
+$env:ADMIN_PASSWORD = [System.Net.NetworkCredential]::new("", $securePassword).Password
+npm run create-admin
+Remove-Item Env:ADMIN_NAME, Env:ADMIN_EMAIL, Env:ADMIN_PASSWORD
+Remove-Variable securePassword
+```
+
+On a POSIX shell (including a Render shell), you can enter the values interactively without echoing the password:
+
+```sh
+read -r -p "Admin name: " ADMIN_NAME
+read -r -p "Admin email: " ADMIN_EMAIL
+read -r -s -p "Admin password: " ADMIN_PASSWORD
+printf '\n'
+export ADMIN_NAME ADMIN_EMAIL ADMIN_PASSWORD
+npm run create-admin
+unset ADMIN_NAME ADMIN_EMAIL ADMIN_PASSWORD
+```
+
+Run from the backend directory so the command uses the backend's configured `MONGO_URI`. It creates the first admin or updates/promotes only the account matching the sole existing admin. It will stop if a different admin already exists or if multiple admins need to be reconciled. It never makes public registration for admin roles available. After it succeeds, sign in through the website using that email and password; the admin dashboard opens at `/admin`.
 
 ## Technology Stack
 

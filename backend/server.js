@@ -5,6 +5,7 @@ import express from "express";
 import morgan from "morgan";
 import { connectDB} from "./config/db.js";
 import { errorHandler, notFound } from "./middleware/errorMiddleware.js";
+import { User } from "./models/User.js";
 import authRoutes from "./routes/authRoutes.js";
 import issueRoutes from "./routes/issueRoutes.js";
 
@@ -45,8 +46,11 @@ app.use(errorHandler);
 
 connectDB()
   .then(() => {
+    return User.createIndexes();
+  })
+  .then(() => {
     app.listen(PORT, () => {
-      console.log(`Server running on http://localhost:${process.env.PORT}`);
+      console.log(`Server running on http://localhost:${PORT}`);
     });
   })
   .catch((error) => {

@@ -26,6 +26,10 @@ const userSchema = new mongoose.Schema(
       type: String,
       enum: ["student", "staff", "admin"],
       default: "student"
+    },
+    adminKey: {
+      type: String,
+      select: false
     }
   },
   {
@@ -34,6 +38,7 @@ const userSchema = new mongoose.Schema(
 );
 
 userSchema.index({ role: 1 });
+userSchema.index({ adminKey: 1 }, { unique: true, sparse: true });
 
 userSchema.pre("save", async function savePassword(next) 
 {

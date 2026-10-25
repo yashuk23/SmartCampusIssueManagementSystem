@@ -34,11 +34,16 @@ export const register = async (req, res, next) => {
       });
     }
 
+    if (requestedRole === "admin" && await User.exists({ role: "admin" })) {
+      return res.status(409).json({ message: "An administrator account already exists" });
+    }
+
     const user = await User.create({
       name,
       email,
       password,
-      role: requestedRole
+      role: requestedRole,
+      ...(requestedRole === "admin" ? { adminKey: "primary-admin" } : {})
     });
 
     const token = createToken(user._id);
@@ -55,6 +60,10 @@ export const register = async (req, res, next) => {
     });
   } catch (error) 
   {
+    if (error.code === 11000 && error.keyPattern?.adminKey) {
+      return res.status(409).json({ message: "An administrator account already exists" });
+    }
+
     next(error);
   }
 };
